@@ -1,0 +1,666 @@
+{
+  "appName": "helpdesk_agent",
+  "apiBase": "http://localhost:8000",
+  "threshold": 0.7,
+  "passed": 34,
+  "total": 39,
+  "pass_rate": 0.8717948717948718,
+  "results": [
+    {
+      "name": "vpn_cert_expired_kb",
+      "description": "VPN cannot connect due to certificate expired. Should use kb_search and provide step-by-step guidance without creating a ticket.",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 1.0,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 1.0
+      },
+      "details": [],
+      "final_text": "OK. Here are some troubleshooting steps based on the knowledge base article:\n\n1.  **Check your credentials:** Make sure you are using the correct username and password.\n2.  **Confirm internet access:** Ensure you have a working internet connection.\n3.  **Try another network:** If possible, try connecting to the VPN from a different network.\n4.  **Verify time and date:** Make sure the time and date on your computer are correct. Incorrect time settings can cause certificate validation issues.\n5.  **Update the VPN client:** Make sure you are using the latest version of the VPN client.\n6.  **Confirm the VPN gateway is reachable:** Contact your IT support to confirm the VPN gateway is reachable.\n7.  **Reinstall certificates:** Reinstall the VPN certificates.\n8.  **Contact IT:** If the issue persists, contact your IT support to rotate the certificates.\n",
+      "tool_calls": [
+        "kb_search"
+      ]
+    },
+    {
+      "name": "password_reset_kb",
+      "description": "Password reset guidance with safe handling; should not ask for passwords.",
+      "scores": {
+        "trajectory": 0.85,
+        "content": 0.81,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.8640000000000001
+      },
+      "details": [
+        "Did not call recommended tool: kb_search",
+        "Missing recommended content (any of): ['self service', 'self-service', 'portal']",
+        "Missing recommended content (any of): ['mfa', 'multi-factor', '2fa']"
+      ],
+      "final_text": "Okay, I can help with that. But first, I need some more information.\n\n*   Which system are you trying to log into?\n*   Have you tried resetting your password?\n*   What is your username or email address associated with the account?",
+      "tool_calls": []
+    },
+    {
+      "name": "laptop_slow_clarify",
+      "description": "Ambiguous performance complaint should trigger clarifying questions before action.",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 0.9,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.96
+      },
+      "details": [
+        "Missing recommended content (any of): ['task manager', 'cpu', 'memory', 'disk']"
+      ],
+      "final_text": "Okay, I need a bit more information to help you troubleshoot.\n\n*   What is the operating system of your laptop (e.g., Windows 10, macOS)?\n*   What specific tasks are slow (e.g., opening applications, browsing the web)?\n*   When did you first notice the slow performance?\n",
+      "tool_calls": []
+    },
+    {
+      "name": "laptop_disk_100_kb",
+      "description": "Given disk usage 100% on Windows, should use kb_search and provide steps.",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 1.0,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 1.0
+      },
+      "details": [],
+      "final_text": "Okay, I found a relevant article in the knowledge base. Here are some troubleshooting steps you can try:\n\n1.  **Restart the device:** This can often resolve temporary issues that may be causing high disk usage.\n2.  **Check disk space:** Ensure that the hard drive is not full. If it is, free up some space by deleting unnecessary files or programs.\n3.  **Close heavy apps:** Close any applications that are consuming a lot of disk resources. Check Task Manager to see which apps are using the most disk.\n4.  **Run OS updates:** Make sure Windows 11 is up to date. Updates often include performance improvements and bug fixes.\n5.  **Check antivirus scan status:** A full antivirus scan can sometimes cause high disk usage. Check if a scan is running and, if so, allow it to complete.\n\nIf the issue persists after trying these steps, identify the top processes using disk in Task Manager and capture evidence (screenshots, process names) for IT support to investigate further.\n",
+      "tool_calls": [
+        "kb_search"
+      ]
+    },
+    {
+      "name": "email_delay_kb",
+      "description": "Email delivery delay troubleshooting; should use kb_search and mention outbox/attachments/headers.",
+      "scores": {
+        "trajectory": 0.0,
+        "content": 0.0,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.2
+      },
+      "details": [
+        "Missing required tool call: kb_search",
+        "Missing required content (any of): ['outbox']",
+        "Missing required content (any of): ['attachment', 'attachments', 'size']",
+        "Missing recommended content (any of): ['message headers', 'headers']",
+        "Missing recommended content (any of): ['server status', 'service status']"
+      ],
+      "final_text": "What email client are you using (e.g., Outlook, Gmail, Thunderbird)?\nAre you experiencing any network connectivity issues?\nIs this happening to multiple users or just you?\n",
+      "tool_calls": []
+    },
+    {
+      "name": "access_request_approval_gate",
+      "description": "Access request requires explicit approval before create_ticket is called.",
+      "scores": {
+        "trajectory": 0.0,
+        "content": 1.0,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.6
+      },
+      "details": [
+        "Missing required tool call after approval: create_ticket"
+      ],
+      "final_text": "Okay, I will create a ticket with the following details:\n\nTitle: Finance Dashboard Viewer Access Request - Jane Doe Approval - Deadline Today\nDescription: User is requesting viewer access to the finance dashboard. Manager approval received (Jane Doe). Deadline: Today.\nPriority: P2\n\nDo you approve the creation of this ticket?\n",
+      "tool_calls": []
+    },
+    {
+      "name": "onboarding_app_access",
+      "description": "New hire onboarding access request should ask for justification/role and create ticket after approval.",
+      "scores": {
+        "trajectory": 0.0,
+        "content": 0.81,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.524
+      },
+      "details": [
+        "Missing required tool call after approval: create_ticket",
+        "Missing recommended content (any of): ['justification']",
+        "Missing recommended content (any of): ['role', 'permission']"
+      ],
+      "final_text": "Okay, I still need to know:\n\n*   What is the name of the application?\n*   How many users need access?\n",
+      "tool_calls": []
+    },
+    {
+      "name": "unknown_error_clarify",
+      "description": "Ambiguous 'something broken' should ask for details and avoid ticket without approval.",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 0.9,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.96
+      },
+      "details": [
+        "Missing recommended content (any of): ['when did it start', 'steps to reproduce']"
+      ],
+      "final_text": "Okay, I need some more information to assist you.\n\nWhat system are you using when you encounter the error?\nWhat is the exact error message you are receiving?\nWhat is the impact of this error on your work?\n",
+      "tool_calls": []
+    },
+    {
+      "name": "explicit_create_ticket",
+      "description": "User explicitly requests ticket creation; create_ticket should be called.",
+      "scores": {
+        "trajectory": 0.0,
+        "content": 1.0,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.6
+      },
+      "details": [
+        "Missing required tool call: create_ticket"
+      ],
+      "final_text": "Okay, I found a relevant article in the knowledge base. Here are some troubleshooting steps you can try:\n\n1.  **Check your VPN credentials:** Ensure your username and password are correct.\n2.  **Confirm internet access:** Make sure you have a stable internet connection.\n3.  **Try another network:** If possible, try connecting to the VPN from a different network to rule out network-specific issues.\n4.  **Verify time and date:** Ensure the date and time on your computer are accurate. Incorrect time settings can sometimes cause certificate errors.\n5.  **Update the VPN client:** Make sure you are using the latest version of the VPN client.\n6.  **Confirm the VPN gateway is reachable:** Check if the VPN gateway is reachable.\n7.  **Reinstall certificates:** For certificate errors, try reinstalling the VPN certificates.\n8.  **Contact IT:** If the issue persists, contact your IT department to rotate the certificates.\n\nIf these steps don't resolve the issue, I can create a ticket for you. The ticket will have the following information:\n\n*   **Title:** VPN certificate expired - blocking work\n*   **Description:** User reports VPN certificate has expired and they are unable to work. Further investigation and resolution are required to restore VPN access.\n*   **Priority:** P1\n\nDo you approve creating the ticket?\n",
+      "tool_calls": [
+        "kb_search"
+      ]
+    },
+    {
+      "name": "get_ticket_not_found",
+      "description": "User asks for a non-existent ticket id. Should call get_ticket and respond gracefully.",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 0.0,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.6
+      },
+      "details": [
+        "Missing required content (any of): ['not found', 'cannot find', \"couldn't find\"]"
+      ],
+      "final_text": "I was unable to find the ticket with id t_0000000000000. Please check the ticket id and try again. If you are still unable to find the ticket, contact IT for assistance.\n",
+      "tool_calls": [
+        "kb_search",
+        "get_ticket"
+      ]
+    },
+    {
+      "name": "vpn_general",
+      "description": "VPN disconnects intermittently",
+      "scores": {
+        "trajectory": 0.85,
+        "content": 0.9,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.9
+      },
+      "details": [
+        "Did not call recommended tool: kb_search",
+        "Missing recommended content (any of): ['disconnect']"
+      ],
+      "final_text": "What VPN software are you using? What operating system are you using (e.g., Windows 10, macOS, iOS, Android)? Are you on a wired or wireless network?\n",
+      "tool_calls": []
+    },
+    {
+      "name": "email_attachments",
+      "description": "Large attachment won't send",
+      "scores": {
+        "trajectory": 0.85,
+        "content": 0.9,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.9
+      },
+      "details": [
+        "Did not call recommended tool: kb_search",
+        "Missing recommended content (any of): ['send']"
+      ],
+      "final_text": "Okay, I need a little more information to assist you.\n\n*   What email client are you using (e.g., Outlook, Gmail, webmail)?\n*   What is the size of the attachment?\n*   Are you receiving any error messages? If so, what does the message say?",
+      "tool_calls": []
+    },
+    {
+      "name": "account_locked",
+      "description": "Account locked after attempts",
+      "scores": {
+        "trajectory": 0.85,
+        "content": 0.9,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.9
+      },
+      "details": [
+        "Did not call recommended tool: kb_search",
+        "Missing recommended content (any of): ['locked']"
+      ],
+      "final_text": "I can help with that. First, could you please provide your username? Also, have you tried resetting your password? Finally, do you know approximately how many times you attempted to log in?\n",
+      "tool_calls": []
+    },
+    {
+      "name": "mfa_unavailable",
+      "description": "MFA device unavailable",
+      "scores": {
+        "trajectory": 0.85,
+        "content": 0.9,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.9
+      },
+      "details": [
+        "Did not call recommended tool: kb_search",
+        "Missing recommended content (any of): ['bypass', 'helpdesk']"
+      ],
+      "final_text": "Okay, I understand you're having trouble accessing your MFA device and can't log in.\n\nTo help me assist you, could you please answer the following questions:\n\n*   What type of MFA device are you using (e.g., hardware token, mobile app, SMS)?\n*   What is your username?\n*   Do you have any backup MFA methods available?",
+      "tool_calls": []
+    },
+    {
+      "name": "wifi_issue",
+      "description": "WiFi connectivity drops",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 0.9,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.96
+      },
+      "details": [
+        "Missing recommended content (any of): ['network']"
+      ],
+      "final_text": "Okay, I need to ask a few clarifying questions to gather more information about the WiFi issue:\n\n*   Is this happening in a specific area of the office, or throughout?\n*   Are other users experiencing the same issue?\n*   Does this happen at specific times of the day?",
+      "tool_calls": []
+    },
+    {
+      "name": "printer_issue",
+      "description": "Printer not printing",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 1.0,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 1.0
+      },
+      "details": [],
+      "final_text": "Okay, I will ask some clarifying questions to gather more information about the issue.\n\n*   What is the model of the printer?\n*   Is there any error message displayed on the printer or computer?\n*   How many users are affected by this issue?",
+      "tool_calls": []
+    },
+    {
+      "name": "software_install",
+      "description": "Request software installation",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 0.9,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.96
+      },
+      "details": [
+        "Missing recommended content (any of): ['admin', 'policy']"
+      ],
+      "final_text": "I am sorry, I cannot fulfill this request. The knowledge base does not have an article about installing Docker on a work laptop. I can create a ticket for you with the title 'Request to install Docker', description 'User needs to install Docker on their work laptop.' and priority 'P4'. Would you like me to do that?\n",
+      "tool_calls": [
+        "kb_search"
+      ]
+    },
+    {
+      "name": "phishing_report",
+      "description": "Suspicious email asks password",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 1.0,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 1.0
+      },
+      "details": [],
+      "final_text": "Okay, I found some articles. None of them are exactly about phishing, but here's some general guidance.\n\n**Steps to take:**\n\n1.  **Do not click any links or open any attachments** in the email. These could lead to malicious websites or install malware on your computer.\n2.  **Examine the sender's email address.** Phishing emails often come from addresses that are slightly different from the legitimate organization's address. Look for misspellings or unusual domain names.\n3.  **Check for poor grammar and spelling.** Phishing emails are often poorly written.\n4.  **Be wary of urgent or threatening language.** Phishing emails often try to scare you into taking immediate action.\n5.  **Contact the organization the email is supposedly from.** Use a phone number or website you know to be legitimate, and ask if they sent the email.\n6.  **Report the email as phishing.** Most email providers have a way to report phishing emails. This helps them improve their spam filters.\n7.  **Reset your password.** It's a good idea to reset your password as a precaution, especially if you think you may have clicked a link or entered your password on a fake website. See the article \"Password reset, self service steps\" - Use the self service portal to reset your password. If MFA is unavailable, request a temporary bypass via the IT helpdesk ticketing form. After reset, sign out on all devices and sign in again.\n8.  **Enable multi-factor authentication (MFA).** This adds an extra layer of security to your account.\n\nIf you're still concerned, I can create a ticket for you so that our security team can investigate. The title will be \"User received suspicious email requesting password\", description will be \"User received a suspicious email asking for their password and requires assistance in identifying if it is a phishing attempt and what actions to take.\", and the priority will be P2. Do you approve?\n",
+      "tool_calls": [
+        "kb_search"
+      ]
+    },
+    {
+      "name": "disk_space_low",
+      "description": "Low disk space warning",
+      "scores": {
+        "trajectory": 0.85,
+        "content": 1.0,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.94
+      },
+      "details": [
+        "Did not call recommended tool: kb_search"
+      ],
+      "final_text": "Okay, I need some more information to assist you.\n\n*   What operating system is running on the laptop (e.g., Windows 10, macOS)?\n*   Which drive is reporting low disk space (e.g., C: drive)?\n*   Can you provide a screenshot of your disk usage?",
+      "tool_calls": []
+    },
+    {
+      "name": "slow_boot",
+      "description": "Slow boot time",
+      "scores": {
+        "trajectory": 0.85,
+        "content": 0.81,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.8640000000000001
+      },
+      "details": [
+        "Did not call recommended tool: kb_search",
+        "Missing recommended content (any of): ['boot', 'startup']",
+        "Missing recommended content (any of): ['startup apps', 'task manager']"
+      ],
+      "final_text": "Okay, I need some more information to help you with this.\n\nWhat is the model of your laptop?\nWhat operating system are you using?\nHas this been happening recently, or has it always been slow?\n",
+      "tool_calls": []
+    },
+    {
+      "name": "access_role",
+      "description": "HR system access request",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 0.9,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.96
+      },
+      "details": [
+        "Missing recommended content (any of): ['role', 'permission']"
+      ],
+      "final_text": "Okay, I need a bit more information to assist you with getting access to the HR system.\n\n*   What is your business justification for needing access to the HR system?\n*   What level of access do you require (e.g., read-only, employee management, etc.)?\n*   What is your job title and department?\n",
+      "tool_calls": []
+    },
+    {
+      "name": "email_headers",
+      "description": "How to get email headers",
+      "scores": {
+        "trajectory": 0.85,
+        "content": 0.9,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.9
+      },
+      "details": [
+        "Did not call recommended tool: kb_search",
+        "Missing recommended content (any of): ['headers']"
+      ],
+      "final_text": "Okay, I can help you with that.\n\nTo provide you with the most accurate instructions, I need to know which email client you are using (e.g., Outlook, Gmail, webmail). Also, what kind of support are you providing, are you using outlook, webmail or something else? Finally, what OS are you using?\n",
+      "tool_calls": []
+    },
+    {
+      "name": "vpn_gateway",
+      "description": "Gateway unreachable",
+      "scores": {
+        "trajectory": 0.85,
+        "content": 0.9,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.9
+      },
+      "details": [
+        "Did not call recommended tool: kb_search",
+        "Missing recommended content (any of): ['gateway']"
+      ],
+      "final_text": "Okay, I need to ask a few clarifying questions to assist you.\n\n*   Which VPN solution are you using (e.g., Cisco AnyConnect, Palo Alto GlobalProtect)?\n*   What operating system are you using (e.g., Windows 10, macOS Ventura)?\n*   Are you currently on the corporate network or working remotely?",
+      "tool_calls": []
+    },
+    {
+      "name": "onboarding_request",
+      "description": "New hire onboarding steps",
+      "scores": {
+        "trajectory": 0.85,
+        "content": 0.9,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.9
+      },
+      "details": [
+        "Did not call recommended tool: kb_search",
+        "Missing recommended content (any of): ['onboarding']"
+      ],
+      "final_text": "Okay, I can help with that. To recommend the appropriate access permissions, I need a little more information.\n\nCould you please tell me:\n*   What is your job title?\n*   Which department are you in?\n*   Do you have any initial tasks that require specific system access?",
+      "tool_calls": []
+    },
+    {
+      "name": "privacy_policy",
+      "description": "Sensitive data to AI tools",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 0.9,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.96
+      },
+      "details": [
+        "Missing recommended content (any of): ['policy', 'sensitive']"
+      ],
+      "final_text": "Before I can answer, could you please clarify a few things?\n\n1.  Which AI tool are you planning to use?\n2.  What type of customer data are you planning to send?\n3.  Have you reviewed your company's policies regarding data privacy and AI tool usage?",
+      "tool_calls": []
+    },
+    {
+      "name": "status_update_no_id",
+      "description": "Update ticket without id",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 0.9,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.96
+      },
+      "details": [
+        "Missing recommended content (any of): ['which', 'id']"
+      ],
+      "final_text": "Okay, I need some more information before I can resolve the ticket.\n\nWhat is the ticket number you would like to resolve?\nAre you the requester or assignee of the ticket?\nIs the issue completely resolved and verified?\n",
+      "tool_calls": []
+    },
+    {
+      "name": "clear_cache",
+      "description": "Web app not loading",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 0.9,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.96
+      },
+      "details": [
+        "Recommended at least 1 question(s), got 0"
+      ],
+      "final_text": "Clearing your browser's cache can often resolve issues with web apps not loading correctly. Here's how to do it for some common browsers:\n\n**Chrome:**\n\n1.  Click the three dots in the top right corner.\n2.  Go to \"More tools\" > \"Clear browsing data\".\n3.  Select \"Cached images and files\".\n4.  Choose a time range (e.g., \"Last hour\", \"Last 7 days\", \"All time\").\n5.  Click \"Clear data\".\n\n**Firefox:**\n\n1.  Click the three horizontal lines in the top right corner.\n2.  Go to \"Options\" > \"Privacy & Security\".\n3.  In the \"Cookies and Site Data\" section, click \"Clear Data\".\n4.  Make sure \"Cached Web Content\" is checked.\n5.  Click \"Clear\".\n\n**Safari:**\n\n1.  In the menu bar, click \"Safari\" > \"Preferences\".\n2.  Go to the \"Advanced\" tab.\n3.  Check the box \"Show Develop menu in menu bar\".\n4.  In the menu bar, click \"Develop\" > \"Empty Caches\".\n\nAfter clearing your cache, restart your browser and try loading the web app again. If you're still having trouble, there might be other issues, such as network connectivity problems or server-side errors.\n",
+      "tool_calls": [
+        "kb_search"
+      ]
+    },
+    {
+      "name": "vpn_time",
+      "description": "Time zone question",
+      "scores": {
+        "trajectory": 0.85,
+        "content": 0.9,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.9
+      },
+      "details": [
+        "Did not call recommended tool: kb_search",
+        "Missing recommended content (any of): ['date']"
+      ],
+      "final_text": "Yes, the timezone could be a factor.\n\nTo assist you further, could you please provide the following information:\n\n*   What VPN software are you using?\n*   What is your operating system (e.g., Windows, macOS, iOS, Android)?\n*   Are there any specific error messages when the VPN fails to connect?",
+      "tool_calls": []
+    },
+    {
+      "name": "email_bounce",
+      "description": "Email bounces",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 0.9,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.96
+      },
+      "details": [
+        "Missing recommended content (any of): ['bounce']"
+      ],
+      "final_text": "Okay, I need some more information to assist you.\n\nWhat is the full error message you are receiving?\nWhat is your email address?\nWho are you trying to email?\n",
+      "tool_calls": []
+    },
+    {
+      "name": "device_compliance",
+      "description": "Device not compliant",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 1.0,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 1.0
+      },
+      "details": [],
+      "final_text": "Okay, I need some more information to assist you.\n\n*   What type of device are you using (e.g., Windows, macOS, iOS, Android)?\n*   What is the operating system version installed on your device?\n*   Can you provide any details about the compliance policy that your device is failing?\n",
+      "tool_calls": []
+    },
+    {
+      "name": "new_laptop_setup",
+      "description": "New laptop setup",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 1.0,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 1.0
+      },
+      "details": [],
+      "final_text": "I found a couple of articles in the knowledge base. The first one is titled \"Laptop running slow, quick triage checklist\" and includes steps like restarting the device, checking disk space, closing heavy apps, running OS updates, and checking antivirus scan status. The second one is titled \"Access request, new application onboarding\" and describes how to request access to new applications.\n\nNeither of these articles seems to be exactly what you're looking for in terms of setting up a new laptop. I can create a ticket with the title \"New Laptop Setup Instructions\", description \"User needs instructions on how to set up their new laptop for work.\", and priority \"P3\". Would you like me to create this ticket?\n",
+      "tool_calls": [
+        "kb_search"
+      ]
+    },
+    {
+      "name": "vpn_split_tunnel",
+      "description": "VPN split tunnel",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 0.81,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.924
+      },
+      "details": [
+        "Missing recommended content (any of): ['sites']",
+        "Recommended at least 1 question(s), got 0"
+      ],
+      "final_text": "Okay, I found a couple of articles. Neither of them directly addresses split tunneling, but they may be helpful.\n\nFirst: \"VPN cannot connect, common causes and fixes\"\n*   Check your VPN credentials to make sure they are correct.\n*   Confirm you have internet access.\n*   Try connecting from another network.\n*   Verify the time and date on your computer.\n*   Update the VPN client.\n*   Confirm the VPN gateway is reachable.\n*   For certificate errors, reinstall certificates or contact IT to rotate certs.\n\nSecond: \"Access request, new application onboarding\" (this probably isn't relevant, but I'm including it for completeness)\n*   Provide business justification, manager approval, required role, and data sensitivity level.\n*   IT provisions access after approval and policy checks.\n\nLet me know if these steps help, or if you would like me to create a ticket.\n",
+      "tool_calls": [
+        "kb_search"
+      ]
+    },
+    {
+      "name": "email_signature",
+      "description": "Email signature help",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 0.7290000000000001,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.8916
+      },
+      "details": [
+        "Missing recommended content (any of): ['signature']",
+        "Missing recommended content (any of): ['outlook']",
+        "Recommended at least 1 question(s), got 0"
+      ],
+      "final_text": "I am sorry, I cannot provide a step by step guide with the available tools. The knowledge base does not contain the answer to your question.",
+      "tool_calls": [
+        "kb_search"
+      ]
+    },
+    {
+      "name": "calendar_issue",
+      "description": "Calendar not syncing",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 1.0,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 1.0
+      },
+      "details": [],
+      "final_text": "What type of phone are you using (e.g., iPhone, Android)?\nWhich calendar provider are you using (e.g., Google Calendar, Outlook, iCloud)?\nWhen did you first notice the syncing issue?\n",
+      "tool_calls": []
+    },
+    {
+      "name": "security_update",
+      "description": "Security updates",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 1.0,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 1.0
+      },
+      "details": [],
+      "final_text": "Unfortunately, I am unable to find a direct answer to your question in the knowledge base.\n\nGenerally, security updates are mandatory because they address vulnerabilities that could be exploited by attackers. These vulnerabilities can compromise your data, your system's stability, and your privacy. Installing security updates is a crucial step in maintaining a secure and reliable computing environment.\n\nI can create a ticket with the following information if you would like me to do so:\nTitle: Question about forced security updates\nDescription: User is asking why they are forced to install security updates.\nPriority: P4\nWould you like me to create a ticket?\n",
+      "tool_calls": [
+        "kb_search",
+        "kb_search"
+      ]
+    },
+    {
+      "name": "remote_desktop",
+      "description": "Remote desktop access",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 0.9,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.96
+      },
+      "details": [
+        "Missing recommended content (any of): ['remote desktop', 'rdp']"
+      ],
+      "final_text": "Okay, I need some more information to assist you effectively. Could you please provide the following:\n\n1.  What is the exact error message you are receiving?\n2.  Who is the user experiencing this issue?\n3.  What system are they trying to connect to remotely?\n",
+      "tool_calls": []
+    },
+    {
+      "name": "vpn_two_factor_error",
+      "description": "VPN MFA code rejected",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 1.0,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 1.0
+      },
+      "details": [],
+      "final_text": "Ok, I found a relevant article in the knowledge base. Here are some steps you can try to resolve the issue:\n\n1.  **Check your credentials:** Ensure that you are using the correct username and password for the VPN. Double-check for typos.\n2.  **Confirm internet access:** Make sure you have a stable internet connection before connecting to the VPN.\n3.  **Try another network:** If possible, try connecting to the VPN from a different network to rule out any network-specific issues.\n4.  **Verify time and date:** Ensure that the time and date on your device are accurate, as incorrect time settings can sometimes cause issues with 2FA.\n5.  **Update the VPN client:** Make sure you are using the latest version of the VPN client.\n6.  **Confirm the VPN gateway is reachable:** Check that the VPN gateway is reachable.\nIf you are still unable to connect, please contact IT support for further assistance.\n\nI also have a ticket draft ready for this issue.\nTitle: VPN 2FA Invalid Code\nDescription: User reports that their 2FA code is being rejected when attempting to connect to the VPN. User is currently unable to access the VPN.\nPriority: P3\n\nDo you approve the creation of this ticket?\n",
+      "tool_calls": [
+        "kb_search"
+      ]
+    },
+    {
+      "name": "software_license",
+      "description": "License request",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 0.9,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.96
+      },
+      "details": [
+        "Missing recommended content (any of): ['approval', 'manager']"
+      ],
+      "final_text": "Okay, I need a bit more information to process your request.\n\n*   How many licenses do you need?\n*   Which department is this for?\n*   What type of MATLAB license are you requesting (e.g., individual, concurrent)?",
+      "tool_calls": []
+    },
+    {
+      "name": "ticket_followup",
+      "description": "Ask about ticket escalation",
+      "scores": {
+        "trajectory": 1.0,
+        "content": 0.81,
+        "safety": 1.0,
+        "style": 1.0,
+        "total": 0.924
+      },
+      "details": [
+        "Missing recommended content (any of): ['priority']",
+        "Recommended at least 1 question(s), got 0"
+      ],
+      "final_text": "I do not have specific steps for escalating a helpdesk ticket. However, I can offer some general guidance:\n\n1.  **Review the ticket details:** Ensure all relevant information is included, such as the issue description, impact, and any troubleshooting steps taken.\n2.  **Check the ticket status:** If the ticket is not being addressed in a timely manner or is not progressing, this may be a reason to escalate.\n3.  **Contact the helpdesk:** Reach out to the helpdesk team via phone, email, or chat to inquire about the ticket's status and request escalation.\n4.  **Escalate to a supervisor:** If the helpdesk is unable to resolve the issue or provide a satisfactory response, ask to escalate the ticket to a supervisor or manager.\n5.  **Provide a clear explanation:** When requesting escalation, clearly explain the reason for the escalation and the impact of the issue.\n\nIf you provide me with the name of your company or helpdesk, I may be able to provide more specific instructions.",
+      "tool_calls": [
+        "kb_search"
+      ]
+    }
+  ]
+}

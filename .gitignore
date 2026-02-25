@@ -1,0 +1,11 @@
+# IDE / OS
+.env
+.vscode
+
+
+# Python
+/.venv
+__pycache__/
+
+
+todo.list

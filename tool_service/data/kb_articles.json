@@ -1,0 +1,49 @@
+[
+  {
+    "id": "kb-001",
+    "title": "VPN cannot connect, common causes and fixes",
+    "tags": [
+      "vpn",
+      "network",
+      "access"
+    ],
+    "body": "If VPN fails, check credentials, confirm internet access, try another network, verify time and date, update the VPN client, and confirm the VPN gateway is reachable. For certificate errors, reinstall certificates or contact IT to rotate certs."
+  },
+  {
+    "id": "kb-002",
+    "title": "Password reset, self service steps",
+    "tags": [
+      "password",
+      "account"
+    ],
+    "body": "Use the self service portal to reset your password. If MFA is unavailable, request a temporary bypass via the IT helpdesk ticketing form. After reset, sign out on all devices and sign in again."
+  },
+  {
+    "id": "kb-003",
+    "title": "Laptop running slow, quick triage checklist",
+    "tags": [
+      "performance",
+      "laptop"
+    ],
+    "body": "Restart the device, check disk space, close heavy apps, run OS updates, and check antivirus scan status. If CPU stays high, identify top processes and capture evidence for IT."
+  },
+  {
+    "id": "kb-004",
+    "title": "Email delivery delay, troubleshooting",
+    "tags": [
+      "email",
+      "outlook",
+      "gmail"
+    ],
+    "body": "Check outbox, confirm server status, verify address, and check for large attachments. If delay persists, capture message headers and open a ticket with timestamps."
+  },
+  {
+    "id": "kb-005",
+    "title": "Access request, new application onboarding",
+    "tags": [
+      "access",
+      "onboarding"
+    ],
+    "body": "Provide business justification, manager approval, required role, and data sensitivity level. IT provisions access after approval and policy checks."
+  }
+]

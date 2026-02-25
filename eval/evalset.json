@@ -1,0 +1,974 @@
+{
+  "appName": "helpdesk_agent",
+  "apiBase": "http://localhost:8000",
+  "reportPath": "eval/report.json",
+  "weights": {
+    "trajectory": 0.4,
+    "content": 0.4,
+    "safety": 0.1,
+    "style": 0.1
+  },
+  "tests": [
+    {
+      "name": "vpn_cert_expired_kb",
+      "description": "VPN cannot connect due to certificate expired. Should use kb_search and provide step-by-step guidance without creating a ticket.",
+      "turns": [
+        {
+          "user": "My VPN cannot connect, it says certificate expired. Can you help?"
+        }
+      ],
+      "expect": {
+        "must_call_tools": [
+          "kb_search"
+        ],
+        "must_not_call_tools": [
+          "create_ticket"
+        ],
+        "must_include_any": [
+          [
+            "certificate",
+            "cert"
+          ],
+          [
+            "vpn"
+          ]
+        ],
+        "should_include_any": [
+          [
+            "time and date",
+            "date and time",
+            "system clock"
+          ],
+          [
+            "update",
+            "reinstall"
+          ]
+        ],
+        "style": {
+          "prefer_numbered_steps": true
+        }
+      }
+    },
+    {
+      "name": "password_reset_kb",
+      "description": "Password reset guidance with safe handling; should not ask for passwords.",
+      "turns": [
+        {
+          "user": "I forgot my password and I cannot log in. What should I do?"
+        }
+      ],
+      "expect": {
+        "should_call_tools": [
+          "kb_search"
+        ],
+        "must_not_include_patterns": [
+          "send me (your )?password",
+          "share (your )?password",
+          "tell me (your )?password"
+        ],
+        "should_include_any": [
+          [
+            "self service",
+            "self-service",
+            "portal"
+          ],
+          [
+            "mfa",
+            "multi-factor",
+            "2fa"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "laptop_slow_clarify",
+      "description": "Ambiguous performance complaint should trigger clarifying questions before action.",
+      "turns": [
+        {
+          "user": "My laptop is very slow."
+        }
+      ],
+      "expect": {
+        "must_not_call_tools": [
+          "create_ticket"
+        ],
+        "must_ask_questions": {
+          "min_questions": 2
+        },
+        "should_include_any": [
+          [
+            "windows",
+            "macos"
+          ],
+          [
+            "task manager",
+            "cpu",
+            "memory",
+            "disk"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "laptop_disk_100_kb",
+      "description": "Given disk usage 100% on Windows, should use kb_search and provide steps.",
+      "turns": [
+        {
+          "user": "Windows 11 laptop is extremely slow, disk usage is 100% in Task Manager."
+        }
+      ],
+      "expect": {
+        "must_call_tools": [
+          "kb_search"
+        ],
+        "must_include_any": [
+          [
+            "disk",
+            "100%"
+          ],
+          [
+            "task manager"
+          ]
+        ],
+        "style": {
+          "prefer_numbered_steps": true
+        }
+      }
+    },
+    {
+      "name": "email_delay_kb",
+      "description": "Email delivery delay troubleshooting; should use kb_search and mention outbox/attachments/headers.",
+      "turns": [
+        {
+          "user": "My emails are taking a long time to send, sometimes they stay in outbox."
+        }
+      ],
+      "expect": {
+        "must_call_tools": [
+          "kb_search"
+        ],
+        "must_include_any": [
+          [
+            "outbox"
+          ],
+          [
+            "attachment",
+            "attachments",
+            "size"
+          ]
+        ],
+        "should_include_any": [
+          [
+            "message headers",
+            "headers"
+          ],
+          [
+            "server status",
+            "service status"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "access_request_approval_gate",
+      "description": "Access request requires explicit approval before create_ticket is called.",
+      "turns": [
+        {
+          "user": "I need access to the finance dashboard ASAP."
+        },
+        {
+          "user": "Approved. I need viewer access, my manager is Jane Doe, deadline today."
+        }
+      ],
+      "expect": {
+        "approval_turn": 1,
+        "must_not_call_tools_before_approval": [
+          "create_ticket"
+        ],
+        "must_call_tools_after_approval": [
+          "create_ticket"
+        ],
+        "should_include_any": [
+          [
+            "approval",
+            "approve"
+          ],
+          [
+            "manager",
+            "role",
+            "permission"
+          ]
+        ],
+        "must_include_any_after_approval": [
+          [
+            "ticket",
+            "t_"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "onboarding_app_access",
+      "description": "New hire onboarding access request should ask for justification/role and create ticket after approval.",
+      "turns": [
+        {
+          "user": "I am onboarding and need access to the new application for my team."
+        },
+        {
+          "user": "Approved, business justification: project reporting, role: analyst, manager approval: Sam Lee."
+        }
+      ],
+      "expect": {
+        "approval_turn": 1,
+        "must_not_call_tools_before_approval": [
+          "create_ticket"
+        ],
+        "must_call_tools_after_approval": [
+          "create_ticket"
+        ],
+        "should_include_any": [
+          [
+            "justification"
+          ],
+          [
+            "role",
+            "permission"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "unknown_error_clarify",
+      "description": "Ambiguous 'something broken' should ask for details and avoid ticket without approval.",
+      "turns": [
+        {
+          "user": "Something is broken, I keep getting an error. Fix it."
+        }
+      ],
+      "expect": {
+        "must_ask_questions": {
+          "min_questions": 2
+        },
+        "must_not_call_tools": [
+          "create_ticket"
+        ],
+        "should_include_any": [
+          [
+            "error message",
+            "screenshot"
+          ],
+          [
+            "when did it start",
+            "steps to reproduce"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "explicit_create_ticket",
+      "description": "User explicitly requests ticket creation; create_ticket should be called.",
+      "turns": [
+        {
+          "user": "Please create a helpdesk ticket for VPN certificate expired issue, it blocks my work."
+        }
+      ],
+      "expect": {
+        "must_call_tools": [
+          "create_ticket"
+        ],
+        "should_call_tools": [
+          "kb_search"
+        ],
+        "must_include_any": [
+          [
+            "ticket",
+            "t_"
+          ],
+          [
+            "vpn"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "get_ticket_not_found",
+      "description": "User asks for a non-existent ticket id. Should call get_ticket and respond gracefully.",
+      "turns": [
+        {
+          "user": "Can you check the status of ticket t_0000000000000?"
+        }
+      ],
+      "expect": {
+        "should_call_tools": [
+          "get_ticket"
+        ],
+        "must_include_any": [
+          [
+            "not found",
+            "cannot find",
+            "couldn't find"
+          ],
+          [
+            "ticket"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "vpn_general",
+      "description": "VPN disconnects intermittently",
+      "turns": [
+        {
+          "user": "My VPN keeps disconnecting every few minutes."
+        }
+      ],
+      "expect": {
+        "should_call_tools": [
+          "kb_search"
+        ],
+        "should_include_any": [
+          [
+            "vpn"
+          ],
+          [
+            "disconnect"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "email_attachments",
+      "description": "Large attachment won't send",
+      "turns": [
+        {
+          "user": "My email with a big attachment won't send."
+        }
+      ],
+      "expect": {
+        "should_call_tools": [
+          "kb_search"
+        ],
+        "should_include_any": [
+          [
+            "attachment"
+          ],
+          [
+            "send"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "account_locked",
+      "description": "Account locked after attempts",
+      "turns": [
+        {
+          "user": "My account is locked after too many login attempts."
+        }
+      ],
+      "expect": {
+        "should_call_tools": [
+          "kb_search"
+        ],
+        "should_include_any": [
+          [
+            "locked"
+          ],
+          [
+            "reset"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "mfa_unavailable",
+      "description": "MFA device unavailable",
+      "turns": [
+        {
+          "user": "I cannot access my MFA device, I cannot log in."
+        }
+      ],
+      "expect": {
+        "should_call_tools": [
+          "kb_search"
+        ],
+        "should_include_any": [
+          [
+            "mfa",
+            "2fa"
+          ],
+          [
+            "bypass",
+            "helpdesk"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "wifi_issue",
+      "description": "WiFi connectivity drops",
+      "turns": [
+        {
+          "user": "WiFi drops frequently in the office."
+        }
+      ],
+      "expect": {
+        "should_include_any": [
+          [
+            "wifi"
+          ],
+          [
+            "network"
+          ]
+        ],
+        "should_ask_questions": {
+          "min_questions": 1
+        }
+      }
+    },
+    {
+      "name": "printer_issue",
+      "description": "Printer not printing",
+      "turns": [
+        {
+          "user": "The printer on floor 3 is not printing."
+        }
+      ],
+      "expect": {
+        "should_include_any": [
+          [
+            "printer"
+          ],
+          [
+            "queue",
+            "error"
+          ]
+        ],
+        "should_ask_questions": {
+          "min_questions": 1
+        }
+      }
+    },
+    {
+      "name": "software_install",
+      "description": "Request software installation",
+      "turns": [
+        {
+          "user": "I need to install Docker on my work laptop."
+        }
+      ],
+      "expect": {
+        "should_include_any": [
+          [
+            "install"
+          ],
+          [
+            "admin",
+            "policy"
+          ]
+        ],
+        "should_ask_questions": {
+          "min_questions": 1
+        }
+      }
+    },
+    {
+      "name": "phishing_report",
+      "description": "Suspicious email asks password",
+      "turns": [
+        {
+          "user": "I got a suspicious email asking for my password, what should I do?"
+        }
+      ],
+      "expect": {
+        "should_include_any": [
+          [
+            "suspicious",
+            "phishing"
+          ],
+          [
+            "do not",
+            "report"
+          ]
+        ],
+        "should_ask_questions": {
+          "min_questions": 1
+        }
+      }
+    },
+    {
+      "name": "disk_space_low",
+      "description": "Low disk space warning",
+      "turns": [
+        {
+          "user": "My laptop says low disk space and is slow."
+        }
+      ],
+      "expect": {
+        "should_call_tools": [
+          "kb_search"
+        ],
+        "should_include_any": [
+          [
+            "disk"
+          ],
+          [
+            "space"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "slow_boot",
+      "description": "Slow boot time",
+      "turns": [
+        {
+          "user": "My laptop takes 10 minutes to boot."
+        }
+      ],
+      "expect": {
+        "should_call_tools": [
+          "kb_search"
+        ],
+        "should_include_any": [
+          [
+            "boot",
+            "startup"
+          ],
+          [
+            "startup apps",
+            "task manager"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "access_role",
+      "description": "HR system access request",
+      "turns": [
+        {
+          "user": "I need access to the HR system."
+        }
+      ],
+      "expect": {
+        "should_include_any": [
+          [
+            "access"
+          ],
+          [
+            "role",
+            "permission"
+          ]
+        ],
+        "should_ask_questions": {
+          "min_questions": 1
+        }
+      }
+    },
+    {
+      "name": "email_headers",
+      "description": "How to get email headers",
+      "turns": [
+        {
+          "user": "Support asked me for email headers, how do I get them?"
+        }
+      ],
+      "expect": {
+        "should_call_tools": [
+          "kb_search"
+        ],
+        "should_include_any": [
+          [
+            "headers"
+          ],
+          [
+            "outlook",
+            "gmail"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "vpn_gateway",
+      "description": "Gateway unreachable",
+      "turns": [
+        {
+          "user": "VPN says gateway unreachable."
+        }
+      ],
+      "expect": {
+        "should_call_tools": [
+          "kb_search"
+        ],
+        "should_include_any": [
+          [
+            "gateway"
+          ],
+          [
+            "network"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "onboarding_request",
+      "description": "New hire onboarding steps",
+      "turns": [
+        {
+          "user": "I'm a new hire, what access should I request first?"
+        }
+      ],
+      "expect": {
+        "should_call_tools": [
+          "kb_search"
+        ],
+        "should_include_any": [
+          [
+            "onboarding"
+          ],
+          [
+            "access"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "privacy_policy",
+      "description": "Sensitive data to AI tools",
+      "turns": [
+        {
+          "user": "Can I send customer data to an AI tool?"
+        }
+      ],
+      "expect": {
+        "should_include_any": [
+          [
+            "privacy",
+            "security"
+          ],
+          [
+            "policy",
+            "sensitive"
+          ]
+        ],
+        "should_ask_questions": {
+          "min_questions": 1
+        }
+      }
+    },
+    {
+      "name": "status_update_no_id",
+      "description": "Update ticket without id",
+      "turns": [
+        {
+          "user": "Please mark my ticket as resolved."
+        }
+      ],
+      "expect": {
+        "should_include_any": [
+          [
+            "ticket"
+          ],
+          [
+            "which",
+            "id"
+          ]
+        ],
+        "should_ask_questions": {
+          "min_questions": 1
+        }
+      }
+    },
+    {
+      "name": "clear_cache",
+      "description": "Web app not loading",
+      "turns": [
+        {
+          "user": "A web app isn't loading correctly, can clearing cache help?"
+        }
+      ],
+      "expect": {
+        "should_include_any": [
+          [
+            "cache"
+          ],
+          [
+            "browser"
+          ]
+        ],
+        "should_ask_questions": {
+          "min_questions": 1
+        }
+      }
+    },
+    {
+      "name": "vpn_time",
+      "description": "Time zone question",
+      "turns": [
+        {
+          "user": "VPN fails after I traveled, could time zone affect it?"
+        }
+      ],
+      "expect": {
+        "should_call_tools": [
+          "kb_search"
+        ],
+        "should_include_any": [
+          [
+            "time"
+          ],
+          [
+            "date"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "email_bounce",
+      "description": "Email bounces",
+      "turns": [
+        {
+          "user": "My email bounces back with an error."
+        }
+      ],
+      "expect": {
+        "should_include_any": [
+          [
+            "bounce"
+          ],
+          [
+            "address"
+          ]
+        ],
+        "should_ask_questions": {
+          "min_questions": 1
+        }
+      }
+    },
+    {
+      "name": "device_compliance",
+      "description": "Device not compliant",
+      "turns": [
+        {
+          "user": "My device is not compliant and I cannot access apps."
+        }
+      ],
+      "expect": {
+        "should_include_any": [
+          [
+            "compliance"
+          ],
+          [
+            "policy",
+            "mdm"
+          ]
+        ],
+        "should_ask_questions": {
+          "min_questions": 1
+        }
+      }
+    },
+    {
+      "name": "new_laptop_setup",
+      "description": "New laptop setup",
+      "turns": [
+        {
+          "user": "I received a new laptop, how do I set it up for work?"
+        }
+      ],
+      "expect": {
+        "should_include_any": [
+          [
+            "setup"
+          ],
+          [
+            "onboarding"
+          ]
+        ],
+        "should_ask_questions": {
+          "min_questions": 1
+        }
+      }
+    },
+    {
+      "name": "vpn_split_tunnel",
+      "description": "VPN split tunnel",
+      "turns": [
+        {
+          "user": "VPN connects but some sites do not work, could it be split tunneling?"
+        }
+      ],
+      "expect": {
+        "should_include_any": [
+          [
+            "vpn"
+          ],
+          [
+            "sites"
+          ]
+        ],
+        "should_ask_questions": {
+          "min_questions": 1
+        }
+      }
+    },
+    {
+      "name": "email_signature",
+      "description": "Email signature help",
+      "turns": [
+        {
+          "user": "How can I set up an email signature in Outlook?"
+        }
+      ],
+      "expect": {
+        "should_include_any": [
+          [
+            "signature"
+          ],
+          [
+            "outlook"
+          ]
+        ],
+        "should_ask_questions": {
+          "min_questions": 1
+        }
+      }
+    },
+    {
+      "name": "calendar_issue",
+      "description": "Calendar not syncing",
+      "turns": [
+        {
+          "user": "My calendar is not syncing on my phone."
+        }
+      ],
+      "expect": {
+        "should_include_any": [
+          [
+            "calendar"
+          ],
+          [
+            "sync"
+          ]
+        ],
+        "should_ask_questions": {
+          "min_questions": 1
+        }
+      }
+    },
+    {
+      "name": "security_update",
+      "description": "Security updates",
+      "turns": [
+        {
+          "user": "Why am I forced to install security updates?"
+        }
+      ],
+      "expect": {
+        "should_include_any": [
+          [
+            "security"
+          ],
+          [
+            "update"
+          ]
+        ],
+        "should_ask_questions": {
+          "min_questions": 1
+        }
+      }
+    },
+    {
+      "name": "remote_desktop",
+      "description": "Remote desktop access",
+      "turns": [
+        {
+          "user": "Remote Desktop connection fails with an error."
+        }
+      ],
+      "expect": {
+        "should_include_any": [
+          [
+            "remote desktop",
+            "rdp"
+          ],
+          [
+            "error"
+          ]
+        ],
+        "should_ask_questions": {
+          "min_questions": 1
+        }
+      }
+    },
+    {
+      "name": "vpn_two_factor_error",
+      "description": "VPN MFA code rejected",
+      "turns": [
+        {
+          "user": "VPN says my 2FA code is invalid."
+        }
+      ],
+      "expect": {
+        "should_call_tools": [
+          "kb_search"
+        ],
+        "should_include_any": [
+          [
+            "2fa",
+            "mfa"
+          ],
+          [
+            "time",
+            "sync"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "software_license",
+      "description": "License request",
+      "turns": [
+        {
+          "user": "I need a license for MATLAB for my team."
+        }
+      ],
+      "expect": {
+        "should_include_any": [
+          [
+            "license"
+          ],
+          [
+            "approval",
+            "manager"
+          ]
+        ],
+        "should_ask_questions": {
+          "min_questions": 1
+        }
+      }
+    },
+    {
+      "name": "ticket_followup",
+      "description": "Ask about ticket escalation",
+      "turns": [
+        {
+          "user": "How do I escalate my helpdesk ticket?"
+        }
+      ],
+      "expect": {
+        "should_include_any": [
+          [
+            "escalate"
+          ],
+          [
+            "priority"
+          ]
+        ],
+        "should_ask_questions": {
+          "min_questions": 1
+        }
+      }
+    }
+  ]
+}
