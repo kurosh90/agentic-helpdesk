@@ -5,6 +5,9 @@ from typing import Any, Dict, Optional
 from dotenv import load_dotenv
 import requests
 from google.adk.agents import LlmAgent, SequentialAgent
+from google.adk.models.google_llm import Gemini
+from google.genai import types
+
 
 # Load .env on import, Windows friendly
 load_dotenv()
@@ -131,18 +134,26 @@ Safety:
 - Suggest redacting sensitive data before sharing logs.
 """
 
+retry_config = types.HttpRetryOptions(
+    attempts=5,
+    exp_base=7,
+    initial_delay=1,
+    http_status_codes=[408, 429, 500, 503, 504],
+)
+
 
 triage_agent = LlmAgent(
     name="TriageAgent",
-    model=GEMINI_MODEL,
+    model=Gemini(model=GEMINI_MODEL, retry_options=retry_config),
     instruction=TRIAGE_INSTRUCTION,
     output_key="triage_json",
     description="Extracts a structured triage JSON from user input.",
 )
 
+
 action_agent = LlmAgent(
     name="ActionAgent",
-    model=GEMINI_MODEL,
+    model=Gemini(model=GEMINI_MODEL, retry_options=retry_config),
     instruction=ACTION_INSTRUCTION,
     tools=[kb_search, create_ticket, get_ticket, update_ticket_status],
     description="Uses tools to resolve issues and drafts or creates tickets with approval.",

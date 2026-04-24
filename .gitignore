@@ -1,11 +1,24 @@
 # IDE / OS
 .env
-.vscode
+.vscode/
+.DS_Store
 
 
 # Python
 /.venv
 __pycache__/
+*.pyc
 
 
+# ADK runtime data
+.adk/
+**/.adk/
+
+
+# Local runtime storage
+runtime/
+logs/
+
+
+# Others
 todo.list
