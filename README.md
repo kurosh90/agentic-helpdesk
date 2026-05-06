@@ -141,6 +141,7 @@ Outputs:
 - `scripts/demo_client.py` , minimal client for `/run`
 - `eval/evalset.json` , test scenarios and rubric expectations
 - `eval/run_eval.py` , evaluation runner and scorer
+- `runtime/` , local runtime outputs
 
 ### Port conflicts
 If port 7001 or 8000 is already in use, stop the conflicting process or change the ports in your startup commands and config.

@@ -16,8 +16,12 @@ __pycache__/
 
 
 # Local runtime storage
-runtime/
-logs/
+runtime/sessions/
+runtime/artifacts/
+runtime/logs/*
+!runtime/logs/.gitkeep
+runtime/reports/*
+!runtime/reports/.gitkeep
 
 
 # Others

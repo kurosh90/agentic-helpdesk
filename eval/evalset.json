@@ -1,7 +1,7 @@
 {
   "appName": "helpdesk_agent",
   "apiBase": "http://localhost:8000",
-  "reportPath": "eval/report.json",
+  "reportDir": "runtime/reports",
   "weights": {
     "trajectory": 0.4,
     "content": 0.4,

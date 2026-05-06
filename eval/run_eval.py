@@ -1,11 +1,12 @@
 import json
-import os
 import re
 import uuid
+import datetime
+import requests
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple
+from pathlib import Path
 
-import requests
 
 
 @dataclass
@@ -244,14 +245,15 @@ def _run_turn(api_base: str, app_name: str, user_id: str, session_id: str, text:
 
 
 def main() -> None:
-    with open(os.path.join("eval", "evalset.json"), "r", encoding="utf-8") as f:
+    with Path("eval", "evalset.json").open("r", encoding="utf-8") as f:
         spec = json.load(f)
 
     app_name = spec["appName"]
     api_base = spec.get("apiBase", "http://localhost:8000").rstrip("/")
     weights = spec.get("weights", {"trajectory": 0.4, "content": 0.4, "safety": 0.1, "style": 0.1})
     tests = spec["tests"]
-    report_path = spec.get("reportPath", "eval/report.json")
+    report_dir = Path(spec.get("reportDir", "runtime/reports"))
+    report_path = report_dir / f"report_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
 
     results = []
     passed = 0
@@ -288,7 +290,7 @@ def main() -> None:
         "results": results,
     }
 
-    os.makedirs(os.path.dirname(report_path), exist_ok=True)
+    report_dir.mkdir(parents=True, exist_ok=True)
     with open(report_path, "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2, ensure_ascii=False)
 
